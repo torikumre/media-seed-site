@@ -271,3 +271,5 @@
 .invite-note{margin:20px 0 0;color:#e6e6e6;font-size:14px;font-style:italic}
 @media(min-width:761px){.background-section .experience-row-four{grid-template-columns:repeat(4,minmax(0,1fr))}.background-section .experience-row-four>p:last-child{max-width:none}}
 @media(max-width:760px){.invite-card{grid-template-columns:1fr;gap:24px;padding:26px 20px}.invite-card h2{font-size:32px}.invite-lede{font-size:19px}}
+.invite-start{margin:18px 0 0;padding-top:16px;border-top:1px solid #3a3a3a;color:#cfcfcf;font-size:14px}
+.invite-start strong{color:var(--white)}
