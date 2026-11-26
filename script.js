@@ -60,3 +60,27 @@ if (contactForm) {
     window.location.href = `mailto:hello@mediaseed.co?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   });
 }
+
+// Hero video: play/pause and sound
+document.querySelectorAll('[data-hero-player]').forEach(frame => {
+  const video = frame.querySelector('video');
+  const play = frame.querySelector('.play-toggle');
+  const sound = frame.querySelector('.sound-toggle');
+  if (!video) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { video.removeAttribute('autoplay'); video.pause(); play?.classList.add('is-paused'); play?.querySelector('.control-caption') && (play.querySelector('.control-caption').textContent = 'Play'); }
+  play?.addEventListener('click', () => {
+    if (video.paused) { video.play(); } else { video.pause(); }
+    const paused = video.paused;
+    play.classList.toggle('is-paused', paused);
+    play.setAttribute('aria-pressed', String(!paused));
+    play.setAttribute('aria-label', paused ? 'Play video' : 'Pause video');
+    play.querySelector('.control-caption').textContent = paused ? 'Play' : 'Pause';
+  });
+  sound?.addEventListener('click', () => {
+    video.muted = !video.muted;
+    if (!video.muted && video.paused) video.play();
+    sound.setAttribute('aria-pressed', String(!video.muted));
+    sound.setAttribute('aria-label', video.muted ? 'Turn sound on' : 'Turn sound off');
+    sound.firstElementChild.textContent = video.muted ? 'Sound off' : 'Sound on';
+  });
+});
