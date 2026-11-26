@@ -273,3 +273,17 @@
 @media(max-width:760px){.invite-card{grid-template-columns:1fr;gap:24px;padding:26px 20px}.invite-card h2{font-size:32px}.invite-lede{font-size:19px}}
 .invite-start{margin:18px 0 0;padding-top:16px;border-top:1px solid #3a3a3a;color:#cfcfcf;font-size:14px}
 .invite-start strong{color:var(--white)}
+
+/* Announcement ticker (sticky, top of every page) */
+.ticker{display:block;height:44px;overflow:hidden;background:var(--ink);color:var(--white);font:600 12px/44px var(--sans);letter-spacing:.12em;text-transform:uppercase;white-space:nowrap}
+.ticker strong{font:italic 700 15px/44px var(--serif);letter-spacing:0;text-transform:none}
+.ticker-track{display:flex;width:max-content;animation:ticker-scroll 40s linear infinite}
+.ticker-group{display:flex;flex-shrink:0}
+.ticker-group span{padding:0 18px}
+.ticker-dot{color:#777;padding:0!important}
+.ticker:hover .ticker-track,.ticker:focus-visible .ticker-track{animation-play-state:paused}
+.ticker:focus-visible{outline:2px solid var(--white);outline-offset:-4px}
+@keyframes ticker-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media(prefers-reduced-motion:reduce){.ticker-track{animation:none}}
+html{scroll-padding-top:156px}
+@media(max-width:760px){html{scroll-padding-top:120px}.ticker{height:40px;line-height:40px;font-size:11px}.ticker strong{line-height:40px;font-size:14px}.main-nav.menu-open .nav-links{inset:148px 0 0}}
