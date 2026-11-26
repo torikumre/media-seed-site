@@ -303,3 +303,5 @@ html{scroll-padding-top:156px}
 @media(max-width:760px){.steps-invite{grid-template-columns:auto 1fr;gap:14px;padding:18px}.steps-invite-arrow{display:none}.steps-invite-num{font-size:28px}}
 .process-list .invite-tag{margin:0 0 10px;color:var(--white);font-size:10px}
 .process-list .process-invite{padding-left:20px;padding-right:20px;border-radius:8px}
+
+.footer-est{margin:6px 0 0;color:var(--muted);font:600 11px/1.4 var(--sans);letter-spacing:.15em;text-transform:uppercase}
