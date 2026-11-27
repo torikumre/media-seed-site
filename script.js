@@ -147,7 +147,7 @@ document.querySelectorAll('[data-hero-player]').forEach(frame => {
   tagAll('.invite-card, .steps-invite', 'rv-open');
 
   // Headings: split into letters, each section gets its own entrance
-  const effects = ['fx-drop', 'fx-stretch', 'fx-scatter', 'fx-flip', 'fx-focus', 'fx-skew', 'fx-rise'];
+  const effects = ['fx-drop', 'fx-scatter', 'fx-flip', 'fx-focus', 'fx-skew', 'fx-rise'];
   const seed = [...location.pathname].reduce((a, c) => a + c.charCodeAt(0), 0);
   const rand = (min, max) => (Math.random() * (max - min) + min).toFixed(1);
   const splitChars = h => {
@@ -232,18 +232,27 @@ document.querySelectorAll('[data-hero-player], [data-video]').forEach(frame => {
   addEventListener('pointerup', () => { dragging = false; });
 });
 
-// Kinetic word bands move sideways as you scroll
+// Kinetic word bands drift sideways as you scroll (slow, eased)
 (() => {
-  const bands = document.querySelectorAll('.kinetic');
+  const bands = [...document.querySelectorAll('.kinetic')];
   if (!bands.length || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  const move = () => bands.forEach(b => {
+  const TRAVEL = 18; // percent of the row width over a full pass
+  const state = bands.map(() => ({ cur: 0, target: 0 }));
+  const measure = () => bands.forEach((b, i) => {
     const r = b.getBoundingClientRect();
-    if (r.bottom < 0 || r.top > innerHeight) return;
-    const p = (innerHeight - r.top) / (innerHeight + r.height);
-    b.querySelectorAll('.kinetic-row').forEach(row => {
-      const dir = Number(row.dataset.dir);
-      row.firstElementChild.style.transform = `translateX(${dir < 0 ? -p * 35 : -35 + p * 35}%)`;
-    });
+    state[i].target = Math.max(0, Math.min(1, (innerHeight - r.top) / (innerHeight + r.height)));
   });
-  addEventListener('scroll', move, { passive: true }); move();
+  const tick = () => {
+    bands.forEach((b, i) => {
+      const s = state[i];
+      s.cur += (s.target - s.cur) * 0.06;
+      b.querySelectorAll('.kinetic-row').forEach(row => {
+        const dir = Number(row.dataset.dir);
+        row.firstElementChild.style.transform = `translate3d(${dir < 0 ? -s.cur * TRAVEL : -TRAVEL + s.cur * TRAVEL}%,0,0)`;
+      });
+    });
+    requestAnimationFrame(tick);
+  };
+  addEventListener('scroll', measure, { passive: true }); addEventListener('resize', measure);
+  measure(); bands.forEach((b, i) => { state[i].cur = state[i].target; }); tick();
 })();

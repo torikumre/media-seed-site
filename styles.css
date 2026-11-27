@@ -481,3 +481,6 @@ h1 em,h2 em,.mark{background-image:linear-gradient(var(--butter),var(--butter));
 /* ===== Footer: Est. 2019 lines up with a short yellow lead ===== */
 .site-footer .footer-est{display:flex;align-items:center;gap:10px;margin:10px 0 0;font:italic 400 14px/1.4 var(--serif);letter-spacing:0;text-transform:none;color:var(--muted)}
 .site-footer .footer-est:before{content:"";width:22px;height:2px;background:var(--butter)}
+
+/* Behind the Walls lede: yellow sentence on its own indented line */
+.invite-lede .lede-accent{display:block;margin:4px 0 0 1.4em}
