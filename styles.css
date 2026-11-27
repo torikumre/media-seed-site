@@ -314,16 +314,50 @@ html{scroll-padding-top:156px}
 /* Butter yellow accent (#FFE792): marker on white, text color only on black */
 :root{--butter:#FFE792}
 ::selection{background:var(--butter);color:var(--ink)}
-h1 em,h2 em{background:linear-gradient(transparent 60%,var(--butter) 60%,var(--butter) 92%,transparent 92%);-webkit-box-decoration-break:clone;box-decoration-break:clone;padding:0 .06em}
+
 .nav-links a[aria-current="page"]{text-decoration-color:var(--butter);text-decoration-thickness:3px}
 .text-link{text-decoration-color:var(--butter);text-decoration-thickness:3px}
 .text-link:hover{background:var(--butter)}
 .button-primary:hover{background:var(--butter);color:var(--ink)}
-.process-number{background:linear-gradient(transparent 55%,var(--butter) 55%,var(--butter) 90%,transparent 90%);padding:0 .08em}
+
 .ticker strong,.ticker-dot{color:var(--butter)}
 .invite-card .eyebrow,.invite-lede,.steps-invite .invite-tag,.steps-invite-num{color:var(--butter)}
 .steps-invite:hover{background:#222}
 .invite-tag{color:var(--butter)}
 .process-list .invite-tag{color:var(--butter)}
 .nav-links a:hover,.site-footer a:hover{text-decoration:underline;text-decoration-color:var(--butter);text-decoration-thickness:3px;text-underline-offset:5px}
-.steps-list span{background:linear-gradient(transparent 55%,var(--butter) 55%,var(--butter) 90%,transparent 90%);padding:0 .08em}
+
+
+/* Butter yellow micro-animations */
+h1 em,h2 em,.mark{background-image:linear-gradient(var(--butter),var(--butter));background-repeat:no-repeat;background-position:0 88%;background-size:100% 34%;-webkit-box-decoration-break:clone;box-decoration-break:clone;padding:0 .06em}
+.invite-card h2 em,.steps-invite em{background:none}
+.js-motion h1 em,.js-motion h2 em,.js-motion .mark{background-size:0% 34%;transition:background-size .9s cubic-bezier(.2,.7,.2,1) .15s}
+.js-motion .is-in h1 em,.js-motion .is-in h2 em,.js-motion h1.is-in em,.js-motion h2.is-in em,.js-motion .mark.is-in,.js-motion .is-in .mark{background-size:100% 34%}
+
+/* Step numbers: a short yellow line draws in under each number */
+.process-number,.steps-list li>span{position:relative;display:inline-block;align-self:start;justify-self:start;height:max-content;width:max-content}
+.process-number:after,.steps-list li>span:after{content:"";position:absolute;left:0;bottom:-8px;width:100%;height:3px;background:var(--butter);transform-origin:left;transform:scaleX(1)}
+.js-motion .process-number:after,.js-motion .steps-list li>span:after{transform:scaleX(0);transition:transform .7s cubic-bezier(.2,.7,.2,1) .2s}
+.js-motion .is-in .process-number:after,.js-motion .is-in.process-number:after,.js-motion .steps-list li.is-in>span:after{transform:scaleX(1)}
+.steps-list li:nth-child(2)>span:after{transition-delay:.3s}.steps-list li:nth-child(3)>span:after{transition-delay:.4s}.steps-list li:nth-child(4)>span:after{transition-delay:.5s}
+
+/* Links: yellow highlight sweeps in on hover */
+.text-link{background-image:linear-gradient(var(--butter),var(--butter));background-repeat:no-repeat;background-position:0 100%;background-size:0% 100%;transition:background-size .35s ease}
+.text-link:hover{background-color:transparent;background-image:linear-gradient(var(--butter),var(--butter));background-size:100% 100%}
+
+/* Nav + footer: yellow underline slides in from the left */
+.nav-links a:not(.button):hover,.site-footer a:hover{text-decoration:none}
+.nav-links a:not(.button),.site-footer nav a{position:relative}
+.nav-links a:not(.button):after,.site-footer nav a:after{content:"";position:absolute;left:0;right:0;bottom:-4px;height:3px;background:var(--butter);transform:scaleX(0);transform-origin:left;transition:transform .3s ease}
+.nav-links a:not(.button):hover:after,.nav-links a[aria-current="page"]:after,.site-footer nav a:hover:after{transform:scaleX(1)}
+.nav-links a[aria-current="page"]{text-decoration:none}
+
+/* Buttons: yellow fills up from the bottom */
+.button-primary{background-image:linear-gradient(var(--butter),var(--butter));background-repeat:no-repeat;background-position:0 100%;background-size:100% 0%;transition:background-size .3s ease,color .3s ease}
+.button-primary:hover{background-color:var(--ink);background-image:linear-gradient(var(--butter),var(--butter));background-size:100% 100%;color:var(--ink)}
+
+/* Hero video: remove hairline edges */
+.hero-media{border:0}
+.hero-video{transform:scale(1.02)}
+
+@media(prefers-reduced-motion:reduce){.js-motion h1 em,.js-motion h2 em,.js-motion .mark{background-size:100% 34%;transition:none}.js-motion .process-number:after,.js-motion .steps-list li>span:after{transform:scaleX(1);transition:none}.text-link,.button-primary,.nav-links a:after,.site-footer nav a:after{transition:none}}
