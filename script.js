@@ -44,20 +44,33 @@ if (stickyCta && heroSection && 'IntersectionObserver' in window) {
 const contactForm = document.querySelector('[data-contact-form]');
 if (contactForm) {
   const interest = contactForm.elements.namedItem('interest');
-  if (new URLSearchParams(window.location.search).get('offer') === 'proof-shoot' && interest) {
-    interest.value = 'Proof Shoot';
-  }
-  contactForm.addEventListener('submit', event => {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('offer') === 'proof-shoot' && interest) interest.value = 'Proof Shoot';
+  const status = contactForm.querySelector('[data-form-status]');
+  const sent = document.querySelector('[data-form-sent]');
+  const button = contactForm.querySelector('button[type="submit"]');
+  contactForm.elements.namedItem('started').value = Date.now();
+  const showSent = () => { contactForm.hidden = true; if (sent) { sent.hidden = false; sent.querySelectorAll('.mark').forEach(m => m.classList.add('is-in')); } };
+  if (params.get('sent') === '1') showSent();
+  const fallback = () => {
+    const f = new FormData(contactForm);
+    const body = `Name: ${f.get('name')}\nEmail: ${f.get('email')}\nPhone: ${f.get('phone') || ''}\nInterested in: ${f.get('interest')}\nNext job: ${f.get('next-job') || ''}`;
+    return `mailto:hello@mediaseed.co?subject=${encodeURIComponent('Book a 15-minute jobsite content plan')}&body=${encodeURIComponent(body)}`;
+  };
+  contactForm.addEventListener('submit', async event => {
     event.preventDefault();
-    const fields = new FormData(contactForm);
-    const body = [
-      `Name: ${fields.get('name')}`,
-      `Email: ${fields.get('email')}`,
-      `Interested in: ${fields.get('interest')}`,
-      `Next job: ${fields.get('next-job') || ''}`
-    ].join('\n');
-    const subject = 'Book a 15-minute jobsite content plan';
-    window.location.href = `mailto:hello@mediaseed.co?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    const label = button.textContent;
+    button.disabled = true; button.textContent = 'Sending...';
+    status.textContent = '';
+    try {
+      const res = await fetch(contactForm.action, { method: 'POST', body: new FormData(contactForm), headers: { accept: 'application/json' } });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data.ok) throw new Error(data.error || 'Could not send');
+      showSent();
+    } catch (err) {
+      status.innerHTML = `That did not go through. Please try again, or <a class="text-link" href="${fallback()}">email me directly</a>.`;
+      button.disabled = false; button.textContent = label;
+    }
   });
 }
 
