@@ -113,7 +113,7 @@ document.querySelectorAll('[data-hero-player]').forEach(frame => {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   document.documentElement.classList.add('js-motion');
   let wi = 0;
-  document.querySelectorAll('h1').forEach(h => {
+  document.querySelectorAll('h1.word-split').forEach(h => {
     h.classList.add('split');
     [...h.childNodes].forEach(node => {
       if (node.nodeType === 3) {
@@ -143,10 +143,8 @@ document.querySelectorAll('[data-hero-player]').forEach(frame => {
   tagAll('.inside-item', 'rv-side', (el, i) => el.style.setProperty('--dx', ((i % 2 ? 1 : -1) * 70) + 'px'));
   tagAll('.trade-proof-card', 'rv-slide');
   tagAll('.process-list > li, .steps-list > li', 'rv-drop');
-  tagAll('.value-row > *, .experience-row > *, .section-heading > p', 'rv-blur');
   tagAll('.proof-card', 'rv-tilt');
   tagAll('.invite-card, .steps-invite', 'rv-open');
-  tagAll('.page-cta', 'rv-zoom');
 
   // Headings: split into letters, each section gets its own entrance
   const effects = ['fx-drop', 'fx-stretch', 'fx-scatter', 'fx-flip', 'fx-focus', 'fx-skew', 'fx-rise'];
@@ -177,6 +175,18 @@ document.querySelectorAll('[data-hero-player]').forEach(frame => {
   document.querySelectorAll('main h2').forEach((h, n) => {
     splitChars(h);
     h.classList.add('rv', 'fx', effects[(n + seed) % effects.length]);
+  });
+  document.querySelectorAll('h1').forEach(h => {
+    splitChars(h);
+    h.classList.add('fx', effects[(seed + 3) % effects.length]);
+  });
+
+  // Everything else (subheads, paragraphs, small labels): one calm, satisfying rise
+  const cardSel = '.clip-card, .tier-card, .inside-item, .trade-proof-card, .proof-card, .invite-card, .steps-invite, .process-list > li, .steps-list > li, .kinetic, h1, h2';
+  document.querySelectorAll('main p, main h3, main h4, main .eyebrow, main .hero-actions, main .page-cta .button, main ul:not([class]) > li').forEach(el => {
+    if (el.closest(cardSel)) return;
+    const i = [...el.parentElement.children].indexOf(el);
+    el.classList.add('rv', 'rv-text'); el.style.setProperty('--i', i % 6);
   });
   const proxies = new Map();
   const io = new IntersectionObserver(entries => entries.forEach(e => {
