@@ -72,7 +72,7 @@ export async function onRequestPost({ request, env }) {
       reply_to: TO,
       subject: 'Got it. Your jobsite content plan is on the way.',
       html: confirmationHtml(first, esc(interest), esc(business)),
-      text: `Thanks, ${name.split(' ')[0]}.\n\nI got your request for a 15-minute jobsite content plan for ${business}. Here's what happens next:\n\n01  I review your business and your next job.\n02  I reach out within one business day to set a time.\n03  On our 15-minute call, you get a content plan for that job.\n\nRather talk now? Call or text (831) 917-7749.\n\nBuild it. Show it.\nMedia Seed · Monterey County · Est. 2019\nmediaseed.co`
+      text: `Thanks, ${name.split(' ')[0]}.\n\nI got your request for a 15-minute jobsite content plan for ${business}. Here's what happens next:\n\n01  I review your business and your next job.\n02  I reach out within one business day to set a time.\n03  On our 15-minute call, you get a content plan for that job.\n\nRather talk now? Call or text (831) 917-7749.\n\nBuild it. Show it. Grow it.\nMedia Seed · Monterey County · Est. 2019\nmediaseed.co`
     });
   } catch (err) { console.error(err); }
 
@@ -113,7 +113,7 @@ function confirmationHtml(first, interest, business) {
       </tr></table>
     </td></tr>
     <tr><td style="padding:22px 28px;border-top:1px solid #e3e3e0">
-      <p style="margin:0 0 4px;font:italic 18px/1.3 ${serif};color:${INK}">Build it. <span style="background:linear-gradient(transparent 60%,${Y} 60%)">Show it.</span></p>
+      <p style="margin:0 0 4px;font:italic 18px/1.3 ${serif};color:${INK}">Build it. Show it. <span style="background:linear-gradient(transparent 60%,${Y} 60%)">Grow it.</span></p>
       <p style="margin:0;font:12px/1.6 ${sans};color:${MUTED}">Media Seed · Jobsite content for contractors · <a href="https://mediaseed.co" style="color:${MUTED}">mediaseed.co</a></p>
     </td></tr>
   </table></td></tr></table></body></html>`;

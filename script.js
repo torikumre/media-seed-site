@@ -270,3 +270,16 @@ document.querySelectorAll('[data-hero-player], [data-video]').forEach(frame => {
   addEventListener('scroll', measure, { passive: true }); addEventListener('resize', measure);
   measure(); bands.forEach((b, i) => { state[i].cur = state[i].target; }); tick();
 })();
+
+// Seed cursor: a butter-yellow seed follows the mouse and grows over links (desktop only)
+(() => {
+  if (!matchMedia('(hover: hover) and (pointer: fine)').matches || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const dot = document.createElement('div'); dot.className = 'seed-cursor'; dot.setAttribute('aria-hidden', 'true');
+  document.body.append(dot);
+  let x = -100, y = -100, cx = x, cy = y;
+  addEventListener('pointermove', e => { x = e.clientX; y = e.clientY; dot.classList.add('on'); }, { passive: true });
+  document.addEventListener('pointerleave', () => dot.classList.remove('on'));
+  addEventListener('pointerover', e => dot.classList.toggle('grow', !!e.target.closest('a, button, summary, input, select, textarea, .scrub, [role="button"]')));
+  const loop = () => { cx += (x - cx) * 0.22; cy += (y - cy) * 0.22; dot.style.transform = `translate3d(${cx}px, ${cy}px, 0)`; requestAnimationFrame(loop); };
+  loop();
+})();
