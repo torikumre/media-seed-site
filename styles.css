@@ -437,7 +437,7 @@ h1 em,h2 em,.mark{background-image:linear-gradient(var(--butter),var(--butter));
 .js-motion .fx-focus:not(.is-in) .ch{transform:scaleX(2.2);filter:blur(10px)}
 .js-motion .fx-skew:not(.is-in) .ch{transform:translateX(-.8em) skewX(-45deg)}
 .js-motion .fx-rise:not(.is-in) .ch{transform:translateY(.9em) rotate(14deg) scale(.6)}
-.js-motion h2.fx .mark{transition-delay:.7s}
+.js-motion h2.fx .mark{transition-delay:1.1s}
 
 /* ===== Section entrances, each one different ===== */
 .js-motion .rv.rv-wipe{opacity:1;transform:none;clip-path:inset(100% 0 0 0);transition:clip-path 1s cubic-bezier(.7,0,.2,1);transition-delay:calc(var(--i) * 120ms)}
@@ -468,3 +468,16 @@ h1 em,h2 em,.mark{background-image:linear-gradient(var(--butter),var(--butter));
 .kinetic-row.outline i{-webkit-text-stroke:0}
 
 @media(prefers-reduced-motion:reduce){.js-motion .fx .ch,.js-motion .rv{opacity:1!important;transform:none!important;filter:none!important;clip-path:none!important}}
+
+/* ===== h1 letters wait for the intro ===== */
+.js-motion h1.fx .ch{transition-delay:calc(var(--intro-delay) + var(--ci) * 30ms)}
+.js-motion h1.fx em{transition-delay:calc(var(--intro-delay) + .9s)}
+
+/* ===== Subheads + paragraphs: one calm, satisfying rise ===== */
+.js-motion .rv.rv-text:not(.is-in){opacity:0;transform:translateY(.9em);filter:blur(6px)}
+.js-motion .rv.rv-text{transition:opacity 1.1s cubic-bezier(.16,1,.3,1),transform 1.2s cubic-bezier(.16,1,.3,1),filter 1s cubic-bezier(.16,1,.3,1);transition-delay:calc(var(--i,0) * 80ms)}
+.js-motion .hero .rv-text,.js-motion .page-hero .rv-text{transition-delay:calc(var(--intro-delay) + .6s + var(--i,0) * 110ms)}
+
+/* ===== Footer: Est. 2019 lines up with a short yellow lead ===== */
+.site-footer .footer-est{display:flex;align-items:center;gap:10px;margin:10px 0 0;font:italic 400 14px/1.4 var(--serif);letter-spacing:0;text-transform:none;color:var(--muted)}
+.site-footer .footer-est:before{content:"";width:22px;height:2px;background:var(--butter)}
