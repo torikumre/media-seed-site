@@ -497,3 +497,7 @@ h1 em,h2 em,.mark{background-image:linear-gradient(var(--butter),var(--butter));
 .form-sent h2{margin:8px 0 12px}
 .form-sent p:last-child{margin:0;font-size:17px;line-height:1.6;color:var(--body)}
 [hidden]{display:none!important}
+
+/* Never allow sideways scrolling/zoom-out on phones (animations start off to the side) */
+html,body{overflow-x:hidden}
+@supports (overflow:clip){html,body{overflow-x:clip}}
