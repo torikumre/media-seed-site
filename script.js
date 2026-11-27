@@ -54,7 +54,7 @@ if (contactForm) {
   if (params.get('sent') === '1') showSent();
   const fallback = () => {
     const f = new FormData(contactForm);
-    const body = `Name: ${f.get('name')}\nEmail: ${f.get('email')}\nPhone: ${f.get('phone') || ''}\nInterested in: ${f.get('interest')}\nNext job: ${f.get('next-job') || ''}`;
+    const body = `Name: ${f.get('name')}\nBusiness: ${f.get('business')}\nEmail: ${f.get('email')}\nPhone: ${f.get('phone') || ''}\nInterested in: ${f.get('interest')}\nNext job: ${f.get('next-job') || ''}`;
     return `mailto:hello@mediaseed.co?subject=${encodeURIComponent('Book a 15-minute jobsite content plan')}&body=${encodeURIComponent(body)}`;
   };
   contactForm.addEventListener('submit', async event => {
