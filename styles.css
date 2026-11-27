@@ -310,3 +310,18 @@ html{scroll-padding-top:156px}
 .hero-media{aspect-ratio:9/16;height:min(66vh,660px);max-height:none;width:auto;justify-self:center;border-radius:10px;background:#111}
 .hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
 @media(max-width:760px){.hero-media{width:min(100%,380px);height:auto;max-height:none;margin-inline:auto}}
+
+/* Butter yellow accent (#FFE792): highlights only */
+:root{--accent:#FFE792}
+::selection{background:var(--accent);color:var(--ink)}
+h1 em,h2 em{background:linear-gradient(transparent 58%,var(--accent) 58%,var(--accent) 90%,transparent 90%);padding:0 .06em;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.text-link{text-decoration-color:var(--accent);text-decoration-thickness:3px}
+.text-link:hover{text-decoration-color:var(--ink)}
+.button-primary:hover{background:var(--accent);color:var(--ink)}
+.ticker strong,.ticker-dot{color:var(--accent)}
+.invite-card .eyebrow,.invite-lede{color:var(--accent)}
+.invite-tag{color:var(--accent)}
+.process-list .invite-tag{color:var(--accent)}
+.steps-invite-num,.steps-invite .invite-tag{color:var(--accent)}
+.steps-invite:hover{background:#222}
+.invite-card h2 em,.steps-invite em{background:none}
