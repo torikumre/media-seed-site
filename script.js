@@ -84,3 +84,14 @@ document.querySelectorAll('[data-hero-player]').forEach(frame => {
     sound.firstElementChild.textContent = video.muted ? 'Sound off' : 'Sound on';
   });
 });
+
+// Butter yellow reveal: highlights and step lines draw in as they scroll into view
+(() => {
+  const targets = document.querySelectorAll('h1, h2, .mark, .process-list li, .steps-list li');
+  if (!('IntersectionObserver' in window) || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  document.documentElement.classList.add('js-motion');
+  const io = new IntersectionObserver(entries => entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); }
+  }), { threshold: 0.4 });
+  targets.forEach(t => io.observe(t));
+})();
