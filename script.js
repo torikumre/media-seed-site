@@ -133,15 +133,64 @@ document.querySelectorAll('[data-hero-player]').forEach(frame => {
       }
     });
   });
-  const groups = ['.clip-card', '.tier-card', '.inside-item', '.trade-proof-card', '.process-list > li', '.steps-list > li', '.value-row > *', '.experience-row > *'];
-  groups.forEach(sel => document.querySelectorAll(sel).forEach((el, i, all) => {
-    el.classList.add('rv'); el.style.setProperty('--i', [...el.parentElement.children].indexOf(el) % 6);
-  }));
-  document.querySelectorAll('main h2, .section-heading > p, .proof-card, .invite-card, .steps-invite, .page-cta').forEach(el => el.classList.add('rv'));
+  // Every section enters differently
+  const tagAll = (sel, cls, extra) => document.querySelectorAll(sel).forEach(el => {
+    const i = [...el.parentElement.children].indexOf(el);
+    el.style.setProperty('--i', i % 6); el.classList.add('rv', cls); if (extra) extra(el, i);
+  });
+  tagAll('.clip-card', 'rv-wipe');
+  tagAll('.tier-card', 'rv-deal', (el, i) => el.style.setProperty('--rot', ((i % 2 ? 1 : -1) * (5 + i * 3)) + 'deg'));
+  tagAll('.inside-item', 'rv-side', (el, i) => el.style.setProperty('--dx', ((i % 2 ? 1 : -1) * 70) + 'px'));
+  tagAll('.trade-proof-card', 'rv-slide');
+  tagAll('.process-list > li, .steps-list > li', 'rv-drop');
+  tagAll('.value-row > *, .experience-row > *, .section-heading > p', 'rv-blur');
+  tagAll('.proof-card', 'rv-tilt');
+  tagAll('.invite-card, .steps-invite', 'rv-open');
+  tagAll('.page-cta', 'rv-zoom');
+
+  // Headings: split into letters, each section gets its own entrance
+  const effects = ['fx-drop', 'fx-stretch', 'fx-scatter', 'fx-flip', 'fx-focus', 'fx-skew', 'fx-rise'];
+  const seed = [...location.pathname].reduce((a, c) => a + c.charCodeAt(0), 0);
+  const rand = (min, max) => (Math.random() * (max - min) + min).toFixed(1);
+  const splitChars = h => {
+    let ci = 0;
+    const walk = node => [...node.childNodes].forEach(n => {
+      if (n.nodeType === 3) {
+        const frag = document.createDocumentFragment();
+        n.textContent.split(/(\s+)/).forEach(part => {
+          if (!part) return;
+          if (/^\s+$/.test(part)) { frag.append(' '); return; }
+          const wd = document.createElement('span'); wd.className = 'wd';
+          [...part].forEach(ch => {
+            const c = document.createElement('span'); c.className = 'ch'; c.textContent = ch;
+            c.style.cssText = `--ci:${ci++};--rx:${rand(-160, 160)}px;--ry:${rand(-120, 120)}px;--rr:${rand(-45, 45)}deg`;
+            wd.append(c);
+          });
+          frag.append(wd);
+        });
+        n.replaceWith(frag);
+      } else if (n.nodeType === 1) walk(n);
+    });
+    h.setAttribute('aria-label', h.textContent.trim());
+    walk(h);
+  };
+  document.querySelectorAll('main h2').forEach((h, n) => {
+    splitChars(h);
+    h.classList.add('rv', 'fx', effects[(n + seed) % effects.length]);
+  });
+  const proxies = new Map();
   const io = new IntersectionObserver(entries => entries.forEach(e => {
-    if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); }
+    if (e.isIntersecting) { (proxies.get(e.target) || [e.target]).forEach(t => t.classList.add('is-in')); io.unobserve(e.target); }
   }), { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
-  document.querySelectorAll('.rv, h1, .mark').forEach(el => io.observe(el));
+  // Clip-path reveals hide the element from the observer, so watch its parent instead
+  document.querySelectorAll('.rv, h1, .mark').forEach(el => {
+    if (el.matches('.rv-wipe, .rv-open')) {
+      const host = el.parentElement;
+      if (!proxies.has(host)) { proxies.set(host, []); io.observe(host); }
+      proxies.get(host).push(el);
+    } else io.observe(el);
+  });
+
 
   const header = document.querySelector('.site-header');
   if (header) {
@@ -172,3 +221,19 @@ document.querySelectorAll('[data-hero-player], [data-video]').forEach(frame => {
   scrub.addEventListener('change', () => { dragging = false; seek(); });
   addEventListener('pointerup', () => { dragging = false; });
 });
+
+// Kinetic word bands move sideways as you scroll
+(() => {
+  const bands = document.querySelectorAll('.kinetic');
+  if (!bands.length || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const move = () => bands.forEach(b => {
+    const r = b.getBoundingClientRect();
+    if (r.bottom < 0 || r.top > innerHeight) return;
+    const p = (innerHeight - r.top) / (innerHeight + r.height);
+    b.querySelectorAll('.kinetic-row').forEach(row => {
+      const dir = Number(row.dataset.dir);
+      row.firstElementChild.style.transform = `translateX(${dir < 0 ? -p * 35 : -35 + p * 35}%)`;
+    });
+  });
+  addEventListener('scroll', move, { passive: true }); move();
+})();
