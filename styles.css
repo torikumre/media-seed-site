@@ -318,10 +318,11 @@ h1 em,h2 em{background:linear-gradient(transparent 60%,var(--butter) 60%,var(--b
 .nav-links a[aria-current="page"]{text-decoration-color:var(--butter);text-decoration-thickness:3px}
 .text-link{text-decoration-color:var(--butter);text-decoration-thickness:3px}
 .text-link:hover{background:var(--butter)}
-.button-primary:hover{background:var(--ink);color:var(--butter)}
+.button-primary:hover{background:var(--butter);color:var(--ink)}
 .process-number{background:linear-gradient(transparent 55%,var(--butter) 55%,var(--butter) 90%,transparent 90%);padding:0 .08em}
 .ticker strong,.ticker-dot{color:var(--butter)}
-.invite-card .eyebrow,.steps-invite .invite-tag,.steps-invite-num{color:var(--butter)}
+.invite-card .eyebrow,.invite-lede,.steps-invite .invite-tag,.steps-invite-num{color:var(--butter)}
+.steps-invite:hover{background:#222}
 .invite-tag{color:var(--butter)}
 .process-list .invite-tag{color:var(--butter)}
 .nav-links a:hover,.site-footer a:hover{text-decoration:underline;text-decoration-color:var(--butter);text-decoration-thickness:3px;text-underline-offset:5px}
