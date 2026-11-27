@@ -95,3 +95,80 @@ document.querySelectorAll('[data-hero-player]').forEach(frame => {
   }), { threshold: 0.4 });
   targets.forEach(t => io.observe(t));
 })();
+
+// ===== Intro: remember per session, tap to skip =====
+(() => {
+  const intro = document.querySelector('.intro');
+  if (!intro || document.documentElement.classList.contains('intro-seen')) return;
+  try { sessionStorage.setItem('ms-intro', '1'); } catch (e) {}
+  intro.addEventListener('click', () => {
+    intro.classList.add('skip');
+    document.documentElement.style.setProperty('--intro-delay', '.35s');
+  });
+  intro.addEventListener('animationend', e => { if (e.animationName === 'intro-out') intro.remove(); });
+})();
+
+// ===== Motion: split h1 words, scroll reveals, progress line =====
+(() => {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  document.documentElement.classList.add('js-motion');
+  let wi = 0;
+  document.querySelectorAll('h1').forEach(h => {
+    h.classList.add('split');
+    [...h.childNodes].forEach(node => {
+      if (node.nodeType === 3) {
+        const frag = document.createDocumentFragment();
+        node.textContent.split(/(\s+)/).forEach(part => {
+          if (!part) return;
+          if (/^\s+$/.test(part)) { frag.append(part); return; }
+          const w = document.createElement('span'); w.className = 'w';
+          const inner = document.createElement('span'); inner.textContent = part; inner.style.setProperty('--wi', wi++);
+          w.append(inner); frag.append(w);
+        });
+        node.replaceWith(frag);
+      } else if (node.nodeType === 1) {
+        const w = document.createElement('span'); w.className = 'w';
+        const inner = document.createElement('span'); inner.style.setProperty('--wi', wi++);
+        node.replaceWith(w); inner.append(node); w.append(inner);
+      }
+    });
+  });
+  const groups = ['.clip-card', '.tier-card', '.inside-item', '.trade-proof-card', '.process-list > li', '.steps-list > li', '.value-row > *', '.experience-row > *'];
+  groups.forEach(sel => document.querySelectorAll(sel).forEach((el, i, all) => {
+    el.classList.add('rv'); el.style.setProperty('--i', [...el.parentElement.children].indexOf(el) % 6);
+  }));
+  document.querySelectorAll('main h2, .section-heading > p, .proof-card, .invite-card, .steps-invite, .page-cta').forEach(el => el.classList.add('rv'));
+  const io = new IntersectionObserver(entries => entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); }
+  }), { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
+  document.querySelectorAll('.rv, h1, .mark').forEach(el => io.observe(el));
+
+  const header = document.querySelector('.site-header');
+  if (header) {
+    const bar = document.createElement('div'); bar.className = 'scroll-progress'; header.append(bar);
+    const update = () => {
+      const max = document.documentElement.scrollHeight - innerHeight;
+      bar.style.setProperty('--p', max > 0 ? Math.min(1, scrollY / max) : 0);
+    };
+    addEventListener('scroll', update, { passive: true }); update();
+  }
+})();
+
+// ===== Video scrubber: drag to any point (hero + any [data-video]) =====
+document.querySelectorAll('[data-hero-player], [data-video]').forEach(frame => {
+  const video = frame.querySelector('video');
+  if (!video) return;
+  const scrub = document.createElement('input');
+  scrub.type = 'range'; scrub.className = 'scrub'; scrub.min = 0; scrub.max = 1000; scrub.step = 1; scrub.value = 0;
+  scrub.setAttribute('aria-label', 'Seek video');
+  frame.append(scrub);
+  let dragging = false;
+  const paint = () => { const pct = video.duration ? video.currentTime / video.duration : 0; scrub.style.setProperty('--pct', (pct * 100) + '%'); if (!dragging) scrub.value = Math.round(pct * 1000); };
+  video.addEventListener('timeupdate', paint);
+  video.addEventListener('loadedmetadata', paint);
+  const seek = () => { if (video.duration) { video.currentTime = scrub.value / 1000 * video.duration; scrub.style.setProperty('--pct', (scrub.value / 10) + '%'); } };
+  scrub.addEventListener('pointerdown', () => { dragging = true; });
+  scrub.addEventListener('input', seek);
+  scrub.addEventListener('change', () => { dragging = false; seek(); });
+  addEventListener('pointerup', () => { dragging = false; });
+});
