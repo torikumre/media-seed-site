@@ -113,7 +113,7 @@ document.querySelectorAll('[data-hero-player]').forEach(frame => {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   document.documentElement.classList.add('js-motion');
   let wi = 0;
-  document.querySelectorAll('h1').forEach(h => {
+  document.querySelectorAll('h1.word-split').forEach(h => {
     h.classList.add('split');
     [...h.childNodes].forEach(node => {
       if (node.nodeType === 3) {
@@ -175,6 +175,10 @@ document.querySelectorAll('[data-hero-player]').forEach(frame => {
   document.querySelectorAll('main h2').forEach((h, n) => {
     splitChars(h);
     h.classList.add('rv', 'fx', effects[(n + seed) % effects.length]);
+  });
+  document.querySelectorAll('h1').forEach(h => {
+    splitChars(h);
+    h.classList.add('fx', effects[(seed + 3) % effects.length]);
   });
 
   // Everything else (subheads, paragraphs, small labels): one calm, satisfying rise
