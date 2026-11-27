@@ -488,3 +488,12 @@ h1 em,h2 em,.mark{background-image:linear-gradient(var(--butter),var(--butter));
 /* Hide headings until they are split, so nothing flashes before animating (fallback shows them after 4s) */
 .js-motion h1:not(.fx),.js-motion main h2:not(.fx){opacity:0;animation:ms-show 0s 4s forwards}
 @keyframes ms-show{to{opacity:1}}
+
+/* Contact form */
+.contact-form .optional{font-weight:400;color:var(--muted)}
+.contact-form .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.contact-form button[disabled]{opacity:.6;cursor:wait}
+.form-sent{max-width:680px;padding:36px;background:var(--soft);border-radius:10px}
+.form-sent h2{margin:8px 0 12px}
+.form-sent p:last-child{margin:0;font-size:17px;line-height:1.6;color:var(--body)}
+[hidden]{display:none!important}
