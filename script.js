@@ -178,7 +178,8 @@ document.querySelectorAll('[data-hero-player]').forEach(frame => {
   });
   document.querySelectorAll('h1').forEach(h => {
     splitChars(h);
-    h.classList.add('fx', effects[(seed + 3) % effects.length]);
+    // The homepage hero headline always assembles from every angle
+    h.classList.add('fx', h.closest('.hero') ? 'fx-scatter' : effects[(seed + 3) % effects.length]);
   });
 
   // Everything else (subheads, paragraphs, small labels): one calm, satisfying rise
